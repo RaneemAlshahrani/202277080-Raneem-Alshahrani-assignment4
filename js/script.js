@@ -20,14 +20,15 @@
     localStorage.setItem('theme', theme);
     if (themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
-
+  // Apply saved theme preference, or fall back to the user's system theme
   applyTheme(localStorage.getItem('theme') || getSystemTheme());
 
+  // Toggle between light and dark mode and save the user's preference
   themeToggle?.addEventListener('click', () => {
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 
-  //  Font size 
+  // Save and apply the user's preferred font size
   function applyFont(px) {
     root.style.fontSize = px;
     localStorage.setItem('fontSize', px);
@@ -43,6 +44,7 @@
   // Mobile menu
   const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
 
+  // Open the mobile navigation menu only on small screens
   function openMenu() {
     if (!isMobile()) return;
     menu.classList.remove('hidden');
@@ -51,6 +53,7 @@
     document.body.classList.add('menu-open');
   }
 
+  // Close the mobile navigation menu and restore page scrolling
   function closeMenu() {
     menu?.classList.add('hidden');
     backdrop?.classList.add('hidden');
@@ -69,7 +72,7 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if (!isMobile()) closeMenu(); });
 
-  //  Scroll-reveal 
+  // Reveal sections as they enter the viewport for a smoother scrolling experience
   const SELECTORS = [
     '#home', '#home .profile-pic', '#home .hero-title', '#home .hero-sub',
     '#home .cta-btn', '#about', '#projects', '.project', '#skills',
@@ -86,6 +89,7 @@
 
   targets.forEach(el => el.classList.add('reveal'));
 
+  // Show all content immediately if reduced motion is preferred or observer is unsupported
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
     targets.forEach(el => el.classList.add('show'));
   } else {
@@ -113,7 +117,7 @@
 
   let currentSort     = null;
   let selectedCategory = 'all';
-
+  // Filter and sort project cards based on the selected category and sort option
   function filterProjects() {
     let visible = projects.filter(p =>
       selectedCategory === 'all' || p.dataset.category === selectedCategory
@@ -149,7 +153,7 @@
     });
   });
 
-  // Close filter dropdown on outside click
+  // Close the custom filter dropdown when clicking outside of it
   document.addEventListener('click', e => {
     if (filterWrap && !filterWrap.contains(e.target)) {
       filterMenu?.classList.add('hidden');
@@ -174,6 +178,7 @@
   const formFeedback = document.getElementById('form-feedback');
   const EMAIL_RE     = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+  // Display feedback messages for form validation and submission status
   function showFeedback(msg, type) {
     if (!formFeedback) return;
     formFeedback.textContent = msg;
@@ -210,6 +215,7 @@
   });
 
   //  Visit timer (sessionStorage) 
+  // Track how long the current visitor stays on the site using sessionStorage
   const timerEl = document.getElementById('visit-timer');
   let seconds   = Number(sessionStorage.getItem('time')) || 0;
 
@@ -233,6 +239,7 @@
   const clearBtn    = document.getElementById('clear-name');
   const nameDisplay = document.getElementById('name-display');
 
+  // Save the visitor's name locally and display a personalized greeting
   let storedName = localStorage.getItem('visitorName') || '';
 
   function renderName() {
@@ -265,6 +272,7 @@
     // Scroll Progress Bar 
   const progressBar = document.getElementById('scroll-progress');
  
+  // Update the progress bar width based on how far the user has scrolled
   if (progressBar) {
     window.addEventListener('scroll', () => {
       const scrolled  = document.documentElement.scrollTop;
@@ -286,34 +294,35 @@
     Python:     '#3572A5',
     Java:       '#b07219'
   };
-
-function relativeDate(iso) {
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-  const week = 7 * day;
-  const month = 30 * day;
-  const year = 365 * day;
-  if (diffMs < minute) return 'just now';
-  const minutes = Math.ceil(diffMs / minute);
-  if (diffMs < hour) {
-    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;}
-  const hours = Math.ceil(diffMs / hour);
-  if (diffMs < day) {
-    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;}
-  const days = Math.ceil(diffMs / day);
-  if (days === 1) return 'yesterday';
-  if (diffMs < week) {
-    return `${days} day${days !== 1 ? 's' : ''} ago`;}
-  const weeks = Math.ceil(diffMs / week);
-  if (diffMs < month) {
-    return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;}
-  const months = Math.ceil(diffMs / month);
-  if (diffMs < year) {
-    return `${months} month${months !== 1 ? 's' : ''} ago`;}
-  const years = Math.ceil(diffMs / year);
-  return `${years} year${years !== 1 ? 's' : ''} ago`;}
+// Convert GitHub timestamps into human-readable relative time
+  function relativeDate(iso) {
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const minute = 60 * 1000;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+    const week = 7 * day;
+    const month = 30 * day;
+    const year = 365 * day;
+    if (diffMs < minute) return 'just now';
+    const minutes = Math.ceil(diffMs / minute);
+    if (diffMs < hour) {
+      return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;}
+    const hours = Math.ceil(diffMs / hour);
+    if (diffMs < day) {
+      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;}
+    const days = Math.ceil(diffMs / day);
+    if (days === 1) return 'yesterday';
+    if (diffMs < week) {
+      return `${days} day${days !== 1 ? 's' : ''} ago`;}
+    const weeks = Math.ceil(diffMs / week);
+    if (diffMs < month) {
+      return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;}
+    const months = Math.ceil(diffMs / month);
+    if (diffMs < year) {
+      return `${months} month${months !== 1 ? 's' : ''} ago`;}
+    const years = Math.ceil(diffMs / year);
+    return `${years} year${years !== 1 ? 's' : ''} ago`;
+  }
 
   function repoCard(repo) {
     const color = LANG_COLORS[repo.language] || '#8b5cf6';
@@ -355,6 +364,7 @@ function relativeDate(iso) {
     requestAnimationFrame(step);
   }
  
+  // Fetch repositories and profile data from the GitHub API, then render stats and repo cards
   async function fetchRepos() {
     if (!reposContainer) return;
  
