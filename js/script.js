@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  // ── DOM refs (queried once) ──────────────────────────────────────────────
+  //  DOM refs (queried once) 
   const root            = document.documentElement;
   const themeToggle     = document.getElementById('themeToggle');
   const fontToggle      = document.getElementById('fontToggle');
@@ -11,7 +11,7 @@
   const backdrop        = document.getElementById('backdrop');
   const filterWrap      = document.getElementById('project-filter-wrap'); // cached here, not inside listener
 
-  // ── Theme ────────────────────────────────────────────────────────────────
+  //  Theme 
   const getSystemTheme = () =>
     window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
@@ -27,7 +27,7 @@
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 
-  // ── Font size ────────────────────────────────────────────────────────────
+  //  Font size 
   function applyFont(px) {
     root.style.fontSize = px;
     localStorage.setItem('fontSize', px);
@@ -40,7 +40,7 @@
     applyFont(localStorage.getItem('fontSize') === '18px' ? '16px' : '18px');
   });
 
-  // ── Mobile menu ─────────────────────────────────────────────────────────
+  // Mobile menu
   const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
 
   function openMenu() {
@@ -69,7 +69,7 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
   window.addEventListener('resize', () => { if (!isMobile()) closeMenu(); });
 
-  // ── Scroll-reveal ────────────────────────────────────────────────────────
+  //  Scroll-reveal 
   const SELECTORS = [
     '#home', '#home .profile-pic', '#home .hero-title', '#home .hero-sub',
     '#home .cta-btn', '#about', '#projects', '.project', '#skills',
@@ -101,7 +101,7 @@
     targets.forEach(el => io.observe(el));
   }
 
-  // ── Project filter & sort ────────────────────────────────────────────────
+  //  Project filter & sort 
   const projects       = Array.from(document.querySelectorAll('.project'));
   const filterBtn      = document.getElementById('project-filter-btn');
   const filterMenu     = document.getElementById('project-filter-menu');
@@ -169,7 +169,7 @@
 
   filterProjects(); // initial render
 
-  // ── Contact form ─────────────────────────────────────────────────────────
+  //  Contact form 
   const contactForm  = document.getElementById('contact-form');
   const formFeedback = document.getElementById('form-feedback');
   const EMAIL_RE     = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -209,7 +209,7 @@
     }
   });
 
-  // ── Visit timer (sessionStorage) ─────────────────────────────────────────
+  //  Visit timer (sessionStorage) 
   const timerEl = document.getElementById('visit-timer');
   let seconds   = Number(sessionStorage.getItem('time')) || 0;
 
@@ -227,7 +227,7 @@
     }, 1000);
   }
 
-  // ── Visitor name (localStorage) ──────────────────────────────────────────
+  //  Visitor name (localStorage)
   const nameInput   = document.getElementById('visitor-name');
   const saveBtn     = document.getElementById('save-name');
   const clearBtn    = document.getElementById('clear-name');
@@ -262,7 +262,7 @@
     if (nameInput) nameInput.value = '';
   });
 
-    // ── Scroll Progress Bar ──────────────────────────────────────────────────
+    // Scroll Progress Bar 
   const progressBar = document.getElementById('scroll-progress');
  
   if (progressBar) {
@@ -275,7 +275,7 @@
     }, { passive: true });
   }
 
-  // ── GitHub repos ─────────────────────────────────────────────────────────
+  // GitHub repos
   const reposContainer = document.getElementById('github-repos');
   const GH_USER        = 'RaneemAlshahrani';
 
@@ -338,7 +338,7 @@ function relativeDate(iso) {
     </article>`;
   }
 
-  // ── GitHub stats counter animation ──────────────────────────────────────
+  // GitHub stats counter animation 
   function animateCounter(el, target, duration = 1200) {
     if (!el) return;
     const start     = performance.now();
@@ -370,7 +370,7 @@ function relativeDate(iso) {
  
       const [allRepos, userData] = await Promise.all([repoRes.json(), userRes.json()]);
  
-      // ── Stats ────────────────────────────────────────────────────────────
+      // Stats 
       const ownRepos   = allRepos.filter(r => !r.fork);
       const totalStars = ownRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
       const followers  = userData.followers ?? 0;
@@ -380,7 +380,7 @@ function relativeDate(iso) {
       animateCounter(document.getElementById('stat-stars'),     totalStars);
       animateCounter(document.getElementById('stat-followers'), followers);
  
-      // ── Repo cards ───────────────────────────────────────────────────────
+      //  Repo cards
       const repos = ownRepos
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
  
