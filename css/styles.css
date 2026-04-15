@@ -162,7 +162,7 @@ section {
   box-shadow: var(--shadow-lg);
   padding: 16px;
   z-index: 1000;
-  overflow: auto;
+  overflow: hidden; /* JS will toggle overflow to auto when menu is open to allow scrolling if needed */
 }
 .mobile-menu__header {
   display: flex;
