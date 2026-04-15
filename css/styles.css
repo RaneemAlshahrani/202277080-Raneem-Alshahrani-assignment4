@@ -153,17 +153,21 @@ section {
 
 .mobile-menu {
   position: fixed;
-  top: 12px; left: 50%;
-  transform: translateX(-50%);
-  width: min(92%, 480px);
-  max-height: calc(100vh - 40px);
+  top: 12px;
+  left: 16px;
+  right: 16px;
+  width: auto;
+  max-width: 100%;
+  transform: none;
+  max-height: calc(100vh - 24px);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   padding: 16px;
   z-index: 1000;
-  overflow: hidden; /* JS will toggle overflow to auto when menu is open to allow scrolling if needed */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .mobile-menu__header {
   display: flex;
