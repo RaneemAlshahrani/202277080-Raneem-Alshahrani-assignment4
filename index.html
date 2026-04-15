@@ -181,7 +181,7 @@
 <section id="github-projects" class="github-section">
   <h2 class="github-title section-title">GitHub Repositories</h2>
  
-  <!-- Stats cards — populated by JS from the same API call -->
+  <!-- GitHub stats and repository cards are filled dynamically by JavaScript -->
   <div id="github-stats" class="github-stats" aria-label="GitHub statistics">
     <div class="stat-card">
       <span class="stat-number" id="stat-repos">—</span>
@@ -241,6 +241,7 @@
 </section>
 
 <!-- ===== CONTACT ===== -->
+<!-- Form feedback message is updated dynamically after validation/submission -->
 <section id="contact" class="reveal">
   <h2 class="section-title">Contact Me</h2>
   <div id="form-feedback" class="form-message" aria-live="polite"></div>
@@ -283,7 +284,7 @@
   <p>© 2026 Raneem Alshahrani. All rights reserved.</p>
 </footer>
 
-<!-- EmailJS — deferred so it doesn't block render -->
+ <!-- EmailJS handles sending contact form messages from the client side -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 <script src="js/script.js" defer></script>
 <script>
