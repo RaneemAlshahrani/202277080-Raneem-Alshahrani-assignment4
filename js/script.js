@@ -262,6 +262,19 @@
     if (nameInput) nameInput.value = '';
   });
 
+    // ── Scroll Progress Bar ──────────────────────────────────────────────────
+  const progressBar = document.getElementById('scroll-progress');
+ 
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const scrolled  = document.documentElement.scrollTop;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = maxScroll > 0
+        ? `${(scrolled / maxScroll) * 100}%`
+        : '0%';
+    }, { passive: true });
+  }
+
   // ── GitHub repos ─────────────────────────────────────────────────────────
   const reposContainer = document.getElementById('github-repos');
   const GH_USER        = 'RaneemAlshahrani';
@@ -274,16 +287,33 @@
     Java:       '#b07219'
   };
 
-  function relativeDate(iso) {
-    const days = Math.ceil((Date.now() - new Date(iso)) / 86_400_000);
-    if (days === 0)  return 'today';
-    if (days === 1)  return 'yesterday';
-    if (days < 7)   return `${days} days ago`;
-    if (days < 30)  { const w = Math.floor(days / 7);  return `${w} week${w > 1 ? 's' : ''} ago`; }
-    if (days < 365) { const mo = Math.floor(days / 30); return `${mo} month${mo > 1 ? 's' : ''} ago`; }
-    const yr = Math.floor(days / 365);
-    return `${yr} year${yr > 1 ? 's' : ''} ago`;
-  }
+function relativeDate(iso) {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const week = 7 * day;
+  const month = 30 * day;
+  const year = 365 * day;
+  if (diffMs < minute) return 'just now';
+  const minutes = Math.ceil(diffMs / minute);
+  if (diffMs < hour) {
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;}
+  const hours = Math.ceil(diffMs / hour);
+  if (diffMs < day) {
+    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;}
+  const days = Math.ceil(diffMs / day);
+  if (days === 1) return 'yesterday';
+  if (diffMs < week) {
+    return `${days} day${days !== 1 ? 's' : ''} ago`;}
+  const weeks = Math.ceil(diffMs / week);
+  if (diffMs < month) {
+    return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;}
+  const months = Math.ceil(diffMs / month);
+  if (diffMs < year) {
+    return `${months} month${months !== 1 ? 's' : ''} ago`;}
+  const years = Math.ceil(diffMs / year);
+  return `${years} year${years !== 1 ? 's' : ''} ago`;}
 
   function repoCard(repo) {
     const color = LANG_COLORS[repo.language] || '#8b5cf6';
@@ -308,38 +338,76 @@
     </article>`;
   }
 
+  // ── GitHub stats counter animation ──────────────────────────────────────
+  function animateCounter(el, target, duration = 1200) {
+    if (!el) return;
+    const start     = performance.now();
+    const startVal  = 0;
+ 
+    function step(now) {
+      const elapsed  = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out curve
+      const eased    = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(startVal + (target - startVal) * eased);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+ 
   async function fetchRepos() {
     if (!reposContainer) return;
-
+ 
     try {
-      const res = await fetch(
-        `https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=30`
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      const data = await res.json();
-      const repos = data
-        .filter(r => !r.fork)
+      // Fetch repos and user profile in parallel
+      const [repoRes, userRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`),
+        fetch(`https://api.github.com/users/${GH_USER}`)
+      ]);
+ 
+      if (!repoRes.ok) throw new Error(`Repos HTTP ${repoRes.status}`);
+      if (!userRes.ok) throw new Error(`User HTTP ${userRes.status}`);
+ 
+      const [allRepos, userData] = await Promise.all([repoRes.json(), userRes.json()]);
+ 
+      // ── Stats ────────────────────────────────────────────────────────────
+      const ownRepos   = allRepos.filter(r => !r.fork);
+      const totalStars = ownRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
+      const followers  = userData.followers ?? 0;
+ 
+      // Animate each stat counter
+      animateCounter(document.getElementById('stat-repos'),     ownRepos.length);
+      animateCounter(document.getElementById('stat-stars'),     totalStars);
+      animateCounter(document.getElementById('stat-followers'), followers);
+ 
+      // ── Repo cards ───────────────────────────────────────────────────────
+      const repos = ownRepos
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
+ 
       reposContainer.innerHTML = repos.length
         ? repos.map(repoCard).join('')
         : '<p class="empty-message">No repositories found.</p>';
-
+ 
       // Ensure dynamically-injected cards are never hidden by the reveal system
       reposContainer.classList.add('show');
       reposContainer.querySelectorAll('.repo-card').forEach(c => c.classList.add('show'));
+ 
     } catch (err) {
       console.error('GitHub fetch error:', err);
       reposContainer.innerHTML = '<p class="error-message">Unable to load repositories. Please try again later.</p>';
+      // Show dashes in stats on failure
+      ['stat-repos','stat-stars','stat-followers'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '—';
+      });
     }
   }
-
+ 
   // Fetch repos when page fully loaded (avoids blocking initial render)
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', fetchRepos);
   } else {
     fetchRepos();
   }
-
+ 
 })();

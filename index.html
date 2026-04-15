@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raneem Alshahrani · Portfolio</title>
+  <link rel="icon" href="assets/images/favicon.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
+
+<!-- ===== SCROLL PROGRESS BAR ===== -->
+<div id="scroll-progress" aria-hidden="true"></div>
 
 <!-- ===== HEADER ===== -->
 <header class="site-header">
@@ -176,6 +180,23 @@
 <!-- ===== GITHUB REPOS ===== -->
 <section id="github-projects" class="github-section">
   <h2 class="github-title section-title">GitHub Repositories</h2>
+ 
+  <!-- Stats cards — populated by JS from the same API call -->
+  <div id="github-stats" class="github-stats" aria-label="GitHub statistics">
+    <div class="stat-card">
+      <span class="stat-number" id="stat-repos">—</span>
+      <span class="stat-label">Repositories</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number" id="stat-stars">—</span>
+      <span class="stat-label">Total Stars</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number" id="stat-followers">—</span>
+      <span class="stat-label">Followers</span>
+    </div>
+  </div>
+ 
   <div id="github-repos" class="repos-container">
     <p class="loading-message">Loading repositories…</p>
   </div>
@@ -231,7 +252,7 @@
     <input type="email" id="email" name="email" placeholder="Your Email" autocomplete="email" required>
 
     <label for="subject">Subject</label>
-    <input type="text"   id="subject" name="subject" placeholder="Subject"required>
+    <input type="text" id="subject" name="subject" placeholder="Subject"required>
 
     <label for="message">Message</label>
     <textarea id="message" name="message" rows="4" required></textarea>
