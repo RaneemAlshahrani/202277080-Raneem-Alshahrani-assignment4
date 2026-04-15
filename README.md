@@ -10,11 +10,14 @@ This project is a personal portfolio website built using HTML, CSS, and JavaScri
 - Adjustable font size for better readability
 - Interactive project filtering and sorting (combined logic)
 - Dynamic GitHub repositories display using GitHub API
+- Live GitHub statistics display (repositories, stars, followers)
 - Visitor session timer (tracks time spent on site)
 - Visitor name storage and personalization (localStorage)
+- Scroll progress bar for improved navigation feedback
 - Smooth animations and transitions (IntersectionObserver)
 - Contact form with validation and email sending (EmailJS)
 - Clear user feedback for errors and success messages
+- Public deployment using Vercel
 
 ---
 
@@ -32,6 +35,9 @@ This project is a personal portfolio website built using HTML, CSS, and JavaScri
 ├── docs/
 │   ├── ai-usage-report.md
 │   └── technical-documentation.md
+├── presentation/
+│   ├── slides.pdf
+│   └── demo-video.mp4
 └── .gitignore
 
 ```
@@ -60,13 +66,21 @@ https://github.com/RaneemAlshahrani/202277080-Raneem-Alshahrani-assignment3.git
 - Use the font size button to adjust text size
 - Filter and sort projects in the Projects section
 - View dynamically loaded GitHub repositories
+- View live GitHub statistics (repositories, stars, followers)
 - Enter your name to personalize the experience
+- Track page reading position using the scroll progress bar
 - Fill out the contact form to send a message
 
 ---
 
 # Short summary of AI use
 AI tools were used during development to assist with debugging, improving code structure, optimizing performance, and refining specific features such as API integration and validation logic. The overall structure, layout, design decisions, and content of the website were created independently by me. A detailed explanation of AI usage is provided in `ai-usage-report.md`.
+
+---
+
+# Live deployment
+
+- Live Website: (https://raneem-dev.vercel.app/)
 
 ---
 
