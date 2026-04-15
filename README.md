@@ -80,7 +80,7 @@ AI tools were used during development to assist with debugging, improving code s
 
 # Live deployment
 
-- Live Website: (https://raneem-dev.vercel.app/)
+- Live Website: https://raneem-dev.vercel.app/
 
 ---
 
