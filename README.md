@@ -23,7 +23,7 @@ This project is a personal portfolio website built using HTML, CSS, and JavaScri
 
 # Project Structure
 ```
-202277080-Raneem-Alshahrani-assignment3/
+202277080-Raneem-Alshahrani-assignment4/
 ├── README.md
 ├── index.html
 ├── css/
